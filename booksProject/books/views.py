@@ -24,7 +24,7 @@ def add_book(request):
            price = data['price'],
            image = image     
         )
-        return redirect('home')
+        return redirect("books:home")
     return render(request,"books/add-book.html")
     
 
