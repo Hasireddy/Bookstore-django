@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 
 from django.http import HttpResponse
 
@@ -13,7 +13,8 @@ def home_view(request):
 
 
 def book_detail(request,id):
-    book = Book.objects.get(id=id)
+    #book = Book.objects.get(id=id)
+    book = get_object_or_404(Book, id=id)
     context = {'book':book}
     return render(request,"books/book-detail.html",context)
 
