@@ -7,10 +7,14 @@ from . models import Book
 # Create your views here.
 
 def home_view(request):
-    return HttpResponse("Home page")
+    books = Book.objects.all()
+    context = {'books':books}
+    return render(request,"books/home.html",context)
+
 
 def book_detail(request,id):
     return HttpResponse("Book detail")
+
 
 def add_book(request):
     if request.method == 'POST':
