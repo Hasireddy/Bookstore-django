@@ -4,6 +4,8 @@ from django.http import HttpResponse
 
 from . models import Book
 
+from .forms import EditBookForm
+
 # Create your views here.
 
 def home_view(request):
@@ -12,11 +14,7 @@ def home_view(request):
     return render(request,"books/home.html",context)
 
 
-def book_detail(request,id):
-    #book = Book.objects.get(id=id)
-    book = get_object_or_404(Book, id=id)
-    context = {'book':book}
-    return render(request,"books/book-detail.html",context)
+
 
 
 def add_book(request):
@@ -33,11 +31,36 @@ def add_book(request):
         )
         return redirect("books:home")
     return render(request,"books/add-book.html")
+
+
+
+def book_detail(request,id):
+    #book = Book.objects.get(id=id)
+    book = get_object_or_404(Book, id=id)
+    context = {'book':book}
+    return render(request,"books/book-detail.html",context)
     
 
 
 def edit_book(request,id):
-    return HttpResponse("Book edited")
+    # getting the book with id to be updated
+    book = Book.objects.get(id=id)
+    # populating the form with the book's information
+    form = EditBookForm(instance=book)
+    
+    if request.method == "POST":
+        form = EditBookForm(request.POST,request.Files,instance=book)
+          # checking if the form's data is valid
+        if form.is_valid():
+             # saving the data to the database
+            form.save()
+            return redirect("books:home")
+    return render(request,"books/update-book.html",{'edit_form':form})
+            
+        
+
+
+
 
 def delete_book(request,id):
     return HttpResponse("Book deleted")
